@@ -31,10 +31,12 @@ class _MyHomePageState extends State<MyHomePage> {
     try{
     final batteryLevel = await platform.invokeMethod('getBatterLevel');
     setState(() {
+      print('set ------');
       _batteryLevel = batteryLevel;
     });
     }on PlatformException catch (error){
       setState(() {
+        print('set ------' + error.message);
       _batteryLevel = null;
     });
     }
@@ -42,12 +44,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Native Code'),
       ),
-      body: Center(child: Text('Battery level : $_batteryLevel'),),
+      body: Column(
+        children: <Widget>[
+          FlatButton(onPressed: _getBatteryLevel, child: Text('get')),
+          Center(child: Text('Battery level : $_batteryLevel'),),
+        ],
+      ),
+      
     );
   }
 }
